@@ -8,7 +8,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Grid,
     Step,
     StepLabel,
     Stepper,
@@ -16,6 +15,7 @@ import {
     Theme,
     Typography,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import makeStyles from "@mui/styles/makeStyles";
 import { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { useTranslation } from "react-i18next";
@@ -105,7 +105,7 @@ const WebauthnDeviceRegisterDialog = function (props: Props) {
                 "Failed to register your device. The identity verification process might have timed out.",
             );
         }
-    }, [options, createErrorNotification, handleClose]);
+    }, [props.open, options, createErrorNotification, handleClose]);
 
     useEffect(() => {
         if (!props.open || state !== WebauthnTouchState.Failure || activeStep !== 0) {
@@ -166,7 +166,7 @@ const WebauthnDeviceRegisterDialog = function (props: Props) {
 
             await performCredentialCreation();
         })();
-    }, [createErrorNotification, credentialDescription, translate]);
+    }, [createErrorNotification, credentialDescription, performCredentialCreation, props.open, translate]);
 
     const handleCredentialDescription = useCallback(
         (description: string) => {
@@ -191,7 +191,7 @@ const WebauthnDeviceRegisterDialog = function (props: Props) {
                             {translate("Enter a description for this credential")}
                         </Typography>
                         <Grid container spacing={1}>
-                            <Grid item xs={12}>
+                            <Grid xs={12}>
                                 <TextField
                                     inputRef={nameRef}
                                     id="name-textfield"
@@ -249,7 +249,7 @@ const WebauthnDeviceRegisterDialog = function (props: Props) {
                     )}
                 </DialogContentText>
                 <Grid container spacing={0} alignItems={"center"} justifyContent={"center"} textAlign={"center"}>
-                    <Grid item xs={12}>
+                    <Grid xs={12}>
                         <Stepper activeStep={activeStep}>
                             {steps.map((label, index) => {
                                 const stepProps: { completed?: boolean } = {};
@@ -264,9 +264,7 @@ const WebauthnDeviceRegisterDialog = function (props: Props) {
                             })}
                         </Stepper>
                     </Grid>
-                    <Grid item xs={12}>
-                        {renderStep(activeStep)}
-                    </Grid>
+                    <Grid xs={12}>{renderStep(activeStep)}</Grid>
                 </Grid>
             </DialogContent>
             <DialogActions>

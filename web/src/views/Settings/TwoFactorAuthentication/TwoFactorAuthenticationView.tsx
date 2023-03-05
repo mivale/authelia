@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 
 import { useNotifications } from "@hooks/NotificationsContext";
 import { useUserInfoPOST } from "@hooks/UserInfo";
-import { useUserInfoTOTPConfiguration, useUserInfoTOTPConfigurationOptional } from "@hooks/UserInfoTOTPConfiguration";
+import { useUserInfoTOTPConfigurationOptional } from "@hooks/UserInfoTOTPConfiguration";
 import { useUserWebauthnDevices } from "@hooks/WebauthnDevices";
 import TOTPPanel from "@views/Settings/TwoFactorAuthentication/TOTPPanel";
 import WebauthnDevicesPanel from "@views/Settings/TwoFactorAuthentication/WebauthnDevicesPanel";
@@ -40,7 +40,7 @@ export default function TwoFactorAuthSettings(props: Props) {
         if (userInfo.has_totp !== hasTOTP) {
             setHasTOTP(userInfo.has_totp);
         }
-    }, [userInfo]);
+    }, [hasTOTP, hasWebAuthn, userInfo]);
 
     useEffect(() => {
         fetchUserTOTPConfig();
@@ -70,10 +70,10 @@ export default function TwoFactorAuthSettings(props: Props) {
 
     return (
         <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid xs={12}>
                 <TOTPPanel config={userTOTPConfig} handleRefreshState={handleRefreshState} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
                 <WebauthnDevicesPanel devices={userWebAuthnDevices} handleRefreshState={handleRefreshState} />
             </Grid>
         </Grid>
